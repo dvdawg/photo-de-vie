@@ -91,6 +91,3 @@ done
 echo >&2
 echo "Done." >&2
 echo "  • Derivatives written to: $OUT_DIR/*-lg.jpg, $OUT_DIR/*-sm.jpg" >&2
-echo "  • Upload those .jpg files to your R2 bucket." >&2
-echo "  • Paste-ready entries for src/data/photos.ts are in: $snippet" >&2
-echo "    (add titles/tags, then drop them into the 'library' array)." >&2
