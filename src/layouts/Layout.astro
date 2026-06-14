@@ -1,0 +1,78 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'photo de vie',
+  description = 'dvd photography gallery',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/dvd.png" />
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #faf9f7;
+    --bg-elevated: #ffffff;
+    --surface: #f1efea;
+    --border: #e2dfd8;
+    --text: #1a1a18;
+    --text-dim: #74716a;
+    --accent: #1a1a18;
+    --accent-contrast: #ffffff;
+    --radius: 10px;
+    --maxw: 1400px;
+    --font-display: 'Clash Display', system-ui, sans-serif;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+      sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+</style>
