@@ -1,0 +1,10 @@
+/*
+ * Tailwind without Preflight.
+ *
+ * The integration is configured with `applyBaseStyles: false`, which skips the
+ * stylesheet Astro would otherwise inject — that file starts with
+ * `@tailwind base`, whose reset would restyle every existing component. Pulling
+ * in the remaining two layers here gives us utility classes and nothing else.
+ */
+@tailwind components;
+@tailwind utilities;

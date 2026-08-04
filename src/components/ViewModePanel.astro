@@ -1,0 +1,30 @@
+---
+/** Header view-mode control: applies a treatment to the whole gallery. */
+import ViewModeMenu from './ViewModeMenu.astro';
+import { hueTargets } from '../data/viewModes';
+---
+
+<ViewModeMenu name="gallery" align="right" theme="light">
+  <div class="menu-section" data-hue-row hidden>
+    <p class="menu-section-title">Hue to keep</p>
+    <div class="flex flex-wrap gap-1.5" role="group" aria-label="Hue to keep">
+      {
+        hueTargets.map((hue) => (
+          <button
+            type="button"
+            class="menu-swatch"
+            data-hue={hue.angle}
+            aria-pressed="false"
+            aria-label={hue.label}
+            title={hue.label}
+            style={`background:${hue.swatch}`}
+          />
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="menu-section" data-shuffle-row hidden>
+    <button type="button" class="menu-button" data-shuffle>Shuffle pairings</button>
+  </div>
+</ViewModeMenu>

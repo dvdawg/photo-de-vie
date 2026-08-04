@@ -1,0 +1,73 @@
+---
+/**
+ * Drop target for full-res originals. One drop can carry several files; the
+ * client posts them one at a time so a failure names the file that caused it.
+ */
+---
+
+<div id="dropzone" class="zone" tabindex="0" role="button" aria-label="Add photographs">
+  <input id="picker" type="file" multiple accept=".jpg,.jpeg,.png,.heic,.tif,.tiff" hidden />
+
+  <p class="lede">Drop originals here</p>
+  <p class="hint">
+    Saved to <code>originals/</code>, resized into <code>processed/</code>, palette sampled, added
+    below. Upload the two JPEGs to R2 yourself.
+  </p>
+
+  <div id="progress" class="progress" hidden></div>
+</div>
+
+<style>
+  .zone {
+    padding: 1.75rem 1.25rem;
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    background: var(--bg-elevated);
+    text-align: center;
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+
+  .zone:hover,
+  .zone:focus-visible {
+    border-color: var(--text-dim);
+  }
+
+  .zone[data-dragging] {
+    border-color: var(--accent);
+    border-style: solid;
+    background: var(--surface);
+  }
+
+  .zone[data-busy] {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .lede {
+    margin: 0 0 0.35rem;
+    font-family: 'Clash Display', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .hint {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  code {
+    padding: 0.05rem 0.3rem;
+    border-radius: 4px;
+    background: var(--surface);
+    font-size: 0.95em;
+  }
+
+  .progress {
+    margin-top: 0.85rem;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+</style>

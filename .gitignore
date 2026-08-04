@@ -33,3 +33,5 @@ processed/
 .vercel
 .netlify
 .wrangler/
+
+docs/

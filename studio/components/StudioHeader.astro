@@ -1,0 +1,84 @@
+---
+/** Title bar: library size, how many photos are missing from R2, and a re-check. */
+---
+
+<header class="bar">
+  <div class="inner">
+    <h1 class="title">photo studio</h1>
+
+    <p class="counts">
+      <span id="count">–</span> photographs
+      <span id="r2-summary" class="r2-summary" hidden></span>
+    </p>
+
+    <div class="actions">
+      <button id="reveal" type="button" class="ghost">Reveal processed/</button>
+      <button id="recheck" type="button" class="ghost">Re-check R2</button>
+      <a href="/" class="ghost" target="_blank" rel="noreferrer">Open gallery ↗</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0.85rem 1.25rem;
+  }
+
+  .title {
+    margin: 0;
+    font-family: 'Clash Display', system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .counts {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+
+  .r2-summary {
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: #fbf0d8;
+    color: var(--warn);
+    font-weight: 500;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.4rem;
+    margin-left: auto;
+  }
+
+  .ghost {
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .ghost:hover {
+    border-color: var(--text-dim);
+    color: var(--text);
+  }
+</style>

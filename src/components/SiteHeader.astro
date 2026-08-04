@@ -1,0 +1,48 @@
+---
+import TagFilter from './TagFilter.astro';
+import ViewModePanel from './ViewModePanel.astro';
+import type { CategorizedTag } from '../data/photos';
+
+interface Props {
+  categories: CategorizedTag[];
+}
+
+const { categories } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <h1>photo de vie</h1>
+
+    <div class="controls">
+      <ViewModePanel />
+      <TagFilter categories={categories} />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: linear-gradient(180deg, var(--bg-elevated), var(--bg));
+  }
+  .header-inner {
+    padding: clamp(1rem, 5vw, 2rem) clamp(1rem, 4vw, 2.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    letter-spacing: -0.01em;
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: none;
+  }
+</style>

@@ -1,0 +1,278 @@
+---
+/**
+ * Markup for one library row, and for one tag chip, as `<template>`s the
+ * client clones. Keeping the markup here rather than in a TS template literal
+ * means the row is authored as HTML and reviewed as HTML.
+ *
+ * The styles are `is:global` but namespaced under `.studio-row` / `.studio-chip`
+ * on purpose: these nodes are cloned and adopted into a container owned by
+ * another component, where Astro's scoping attribute would be doing nothing
+ * useful. The page never ships to `dist/`, so there is no bleed to worry about.
+ */
+---
+
+<template id="row-template">
+  <article class="studio-row" data-row>
+    <button class="studio-row__handle" type="button" aria-label="Drag to reorder" data-handle>
+      ⠿
+    </button>
+
+    <img class="studio-row__thumb" data-thumb alt="" loading="lazy" decoding="async" />
+
+    <div class="studio-row__fields">
+      <div class="studio-row__line">
+        <input
+          class="studio-row__title"
+          data-title
+          type="text"
+          placeholder="Untitled"
+          aria-label="Title"
+          spellcheck="false"
+        />
+        <code class="studio-row__slug" data-slug></code>
+        <span class="studio-row__dims" data-dims></span>
+        <span class="studio-row__r2" data-r2 hidden></span>
+      </div>
+
+      <div class="studio-row__tags" data-tags>
+        <input
+          class="studio-row__tag-input"
+          data-tag-input
+          type="text"
+          placeholder="add tag…"
+          aria-label="Add tag"
+          list="tag-vocabulary"
+          spellcheck="false"
+        />
+      </div>
+
+      <div class="studio-row__line studio-row__line--optional">
+        <input
+          class="studio-row__location"
+          data-location
+          type="text"
+          placeholder="Location"
+          aria-label="Location"
+        />
+        <input
+          class="studio-row__year"
+          data-year
+          type="number"
+          placeholder="Year"
+          aria-label="Year"
+          min="1800"
+          max="2200"
+        />
+      </div>
+    </div>
+
+    <div class="studio-row__actions">
+      <button type="button" data-resample title="Re-sample palette from the local thumbnail">
+        ↻ palette
+      </button>
+      <button type="button" data-remove class="studio-row__remove">Remove</button>
+    </div>
+  </article>
+</template>
+
+<template id="chip-template">
+  <span class="studio-chip" data-chip>
+    <span data-chip-label></span>
+    <button type="button" data-chip-remove aria-label="Remove tag">×</button>
+  </span>
+</template>
+
+<datalist id="tag-vocabulary"></datalist>
+
+<style is:global>
+  .studio-row {
+    display: grid;
+    grid-template-columns: 1.25rem 96px 1fr auto;
+    align-items: start;
+    gap: 0.85rem;
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-elevated);
+  }
+
+  .studio-row[data-dragging] {
+    opacity: 0.4;
+  }
+
+  .studio-row[data-missing] {
+    border-color: #e8d5a8;
+  }
+
+  .studio-row__handle {
+    padding: 0.35rem 0;
+    border: none;
+    background: none;
+    color: var(--text-dim);
+    cursor: grab;
+    line-height: 1;
+  }
+
+  .studio-row__handle:active {
+    cursor: grabbing;
+  }
+
+  .studio-row__thumb {
+    display: block;
+    width: 96px;
+    height: 72px;
+    border-radius: 6px;
+    background: var(--surface);
+    object-fit: cover;
+  }
+
+  .studio-row__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .studio-row__line {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .studio-row__title {
+    flex: 1;
+    min-width: 0;
+    padding: 0.3rem 0.45rem;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background: transparent;
+    font-family: 'Clash Display', system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 500;
+  }
+
+  .studio-row__title:hover {
+    border-color: var(--border);
+  }
+
+  .studio-row__title:focus {
+    border-color: var(--text-dim);
+    background: var(--bg);
+    outline: none;
+  }
+
+  .studio-row__slug,
+  .studio-row__dims {
+    flex: none;
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .studio-row__slug {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+  }
+
+  .studio-row__r2 {
+    flex: none;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: #fbf0d8;
+    color: var(--warn);
+    font-size: 0.7rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .studio-row__tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .studio-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.15rem 0.3rem 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 0.76rem;
+  }
+
+  .studio-chip[data-uncategorized] {
+    background: #f3ece1;
+    color: var(--warn);
+  }
+
+  .studio-chip button {
+    padding: 0 0.15rem;
+    border: none;
+    background: none;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
+  .studio-chip button:hover {
+    color: var(--danger);
+  }
+
+  .studio-row__tag-input {
+    width: 7rem;
+    padding: 0.15rem 0.3rem;
+    border: none;
+    border-bottom: 1px dashed var(--border);
+    background: transparent;
+    font-size: 0.76rem;
+  }
+
+  .studio-row__tag-input:focus {
+    border-bottom-color: var(--text-dim);
+    outline: none;
+  }
+
+  .studio-row__line--optional input {
+    padding: 0.2rem 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: transparent;
+    font-size: 0.78rem;
+  }
+
+  .studio-row__location {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .studio-row__year {
+    width: 5.5rem;
+  }
+
+  .studio-row__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .studio-row__actions button {
+    padding: 0.28rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 0.74rem;
+    white-space: nowrap;
+  }
+
+  .studio-row__actions button:hover {
+    border-color: var(--text-dim);
+    color: var(--text);
+  }
+
+  .studio-row__remove:hover {
+    border-color: var(--danger) !important;
+    color: var(--danger) !important;
+  }
+</style>

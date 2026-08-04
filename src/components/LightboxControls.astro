@@ -1,0 +1,131 @@
+---
+/**
+ * View-mode control for a single photograph, shown inside the lightbox.
+ *
+ * The hue swatches and the partner picker are populated by
+ * `scripts/lightboxView.ts` each time the viewer renders a photo — the hues
+ * come from that photograph's own sampled palette, and the partner list covers
+ * the whole library.
+ */
+import ViewModeMenu from './ViewModeMenu.astro';
+---
+
+<div class="lb-controls" data-lb-controls>
+  <ViewModeMenu name="lightbox" align="left" theme="dark">
+    <div class="menu-section" data-hue-row hidden>
+      <p class="menu-section-title">Hue to keep — from this photo</p>
+      <div class="flex flex-wrap gap-1.5" role="group" aria-label="Hue to keep" data-hue-list></div>
+    </div>
+
+    <div class="menu-section" data-blend-row hidden>
+      <p class="menu-section-title">Blend with</p>
+      <div class="partner-grid" role="group" aria-label="Photo to blend with" data-partner-list></div>
+
+      <label class="control">
+        <span class="control-label">Amount <output data-amount-value>65%</output></span>
+        <input type="range" min="0" max="100" step="1" value="65" data-amount aria-label="Blend amount" />
+      </label>
+
+      <div class="fit-row">
+        <button type="button" class="fit-btn" data-fit="fill">Fill frame</button>
+        <button type="button" class="fit-btn" data-fit="contain">Fit whole</button>
+      </div>
+
+      <label class="control">
+        <span class="control-label">Size <output data-scale-value>100%</output></span>
+        <input type="range" min="25" max="300" step="1" value="100" data-scale aria-label="Partner size" />
+      </label>
+
+      <label class="control">
+        <span class="control-label">Move across <output data-offset-x-value>0</output></span>
+        <input type="range" min="-50" max="50" step="1" value="0" data-offset-x aria-label="Partner horizontal position" />
+      </label>
+
+      <label class="control">
+        <span class="control-label">Move up/down <output data-offset-y-value>0</output></span>
+        <input type="range" min="-50" max="50" step="1" value="0" data-offset-y aria-label="Partner vertical position" />
+      </label>
+    </div>
+  </ViewModeMenu>
+</div>
+
+<style>
+  .lb-controls {
+    position: fixed;
+    top: 1.1rem;
+    left: 1.1rem;
+    z-index: 102;
+  }
+
+  /* Six narrow columns keep the whole library visible without a second scroll
+     bar nested inside the panel's own. */
+  .partner-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.2rem;
+  }
+  /* Populated at runtime, so these children are outside this component's scope. */
+  .partner-grid :global(.partner) {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .partner-grid :global(.partner img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .partner-grid :global(.partner[aria-pressed='true']) {
+    border-color: #f0efed;
+  }
+  .partner-grid :global(.partner[disabled]) {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  .control {
+    display: block;
+    margin-top: 0.7rem;
+  }
+  .control-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: 0.3rem;
+  }
+  .control input {
+    width: 100%;
+    accent-color: #f0efed;
+    cursor: pointer;
+  }
+
+  .fit-row {
+    display: flex;
+    gap: 0.35rem;
+    margin-top: 0.8rem;
+  }
+  .fit-btn {
+    flex: 1;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .fit-btn:hover {
+    color: #f0efed;
+    border-color: rgba(255, 255, 255, 0.45);
+  }
+</style>

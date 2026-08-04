@@ -1,0 +1,50 @@
+---
+import PhotoCard from './PhotoCard.astro';
+import type { Photo } from '../data/photos';
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<section class="gallery" id="gallery" aria-label="Photo gallery">
+  {photos.map((photo, i) => <PhotoCard photo={photo} index={i} />)}
+</section>
+
+<p class="empty-state" data-empty hidden>
+  No photos match those tags. Try fewer tags or switch to “Any”.
+</p>
+
+{/* Library for the client scripts, read once via `scripts/photoData.ts`. */}
+<script type="application/json" id="photo-data" set:html={JSON.stringify(photos)} />
+
+<style>
+  /* Masonry via CSS columns. Note this fills each column top-to-bottom before
+     starting the next, so visual order runs down a column, not across a row. */
+  .gallery {
+    column-count: 3;
+    column-gap: 1rem;
+    padding: 0.5rem 0 3rem;
+  }
+  @media (max-width: 1000px) {
+    .gallery {
+      column-count: 2;
+    }
+  }
+  @media (max-width: 620px) {
+    .gallery {
+      column-count: 1;
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--text-dim);
+    padding: 4rem 1rem;
+  }
+  .empty-state[hidden] {
+    display: none;
+  }
+</style>

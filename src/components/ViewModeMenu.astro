@@ -1,0 +1,192 @@
+---
+/**
+ * Shared shell for a view-mode picker: the toggle button, the dropdown, and the
+ * list of modes. Both the header and the lightbox use it; each supplies its own
+ * extras (hue swatches, partner picker, sliders) through the default slot.
+ *
+ * Behaviour is attached by `scripts/modeMenu.ts`, which finds instances via
+ * `[data-mode-menu]`. Layout comes from Tailwind utilities; colours come from
+ * the theme variables below, so the same markup works on the light header and
+ * inside the dark lightbox.
+ */
+import { viewModes } from '../data/viewModes';
+
+interface Props {
+  /** Distinguishes instances; also used for the aria-controls relationship. */
+  name: string;
+  /** Which side of the toggle the panel opens on. */
+  align?: 'left' | 'right';
+  /** Palette to render in. */
+  theme?: 'light' | 'dark';
+}
+
+const { name, align = 'right', theme = 'light' } = Astro.props;
+const panelId = `${name}-mode-panel`;
+---
+
+<div class="mode-menu relative flex-none" data-mode-menu={name} data-theme={theme}>
+  <button
+    type="button"
+    data-mode-toggle
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-controls={panelId}
+    aria-label="View mode"
+    title="View mode"
+    class="mode-toggle inline-flex cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+  >
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor" stroke="none"></path>
+    </svg>
+  </button>
+
+  <div
+    id={panelId}
+    data-mode-panel
+    hidden
+    role="menu"
+    class:list={[
+      'mode-panel absolute top-[calc(100%+0.5rem)] z-[110] w-[min(17rem,calc(100vw-2rem))] max-h-[min(32rem,70vh)] overflow-y-auto rounded-none p-4',
+      align === 'right' ? 'right-0' : 'left-0',
+    ]}
+  >
+    <div class="flex flex-col" role="group" aria-label="View mode">
+      {
+        viewModes.map((mode) => (
+          <button
+            type="button"
+            data-mode={mode.id}
+            aria-pressed="false"
+            class="mode-option cursor-pointer rounded-none border-0 bg-transparent px-2 py-[0.35rem] text-left"
+          >
+            <span class="mode-label block text-[0.82rem]">{mode.label}</span>
+            <span class="mode-hint block text-[0.66rem] leading-tight">{mode.hint}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <slot />
+  </div>
+</div>
+
+<style>
+  .mode-menu[data-theme='light'] {
+    --menu-bg: var(--bg-elevated);
+    --menu-line: var(--border);
+    --menu-text: var(--text);
+    --menu-dim: var(--text-dim);
+    --menu-hover: var(--surface);
+    --menu-on: var(--accent);
+    --menu-on-text: var(--accent-contrast);
+    --menu-shadow: 0 12px 40px rgba(20, 18, 12, 0.16);
+  }
+  .mode-menu[data-theme='dark'] {
+    --menu-bg: rgba(26, 26, 30, 0.97);
+    --menu-line: rgba(255, 255, 255, 0.16);
+    --menu-text: #f0efed;
+    --menu-dim: rgba(255, 255, 255, 0.55);
+    --menu-hover: rgba(255, 255, 255, 0.1);
+    --menu-on: #f0efed;
+    --menu-on-text: #17171a;
+    --menu-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .mode-toggle {
+    color: var(--menu-text);
+    transition: color 0.15s ease, opacity 0.15s ease;
+  }
+  .mode-toggle svg {
+    display: block;
+  }
+  .mode-toggle:hover {
+    opacity: 0.7;
+  }
+  .mode-toggle.has-active {
+    color: var(--menu-on);
+  }
+
+  .mode-panel {
+    background: var(--menu-bg);
+    border: 1px solid var(--menu-line);
+    box-shadow: var(--menu-shadow);
+    color: var(--menu-text);
+    font-family: var(--font-body);
+    transform-origin: top;
+    animation: dropdown-in 0.16s ease;
+  }
+  /* Preflight is disabled, so `[hidden]` is only honoured by the UA sheet —
+     stated explicitly so a future display utility cannot silently win. */
+  .mode-panel[hidden] {
+    display: none;
+  }
+
+  .mode-option {
+    transition: background 0.15s ease;
+  }
+  .mode-option:hover {
+    background: var(--menu-hover);
+  }
+  .mode-option[aria-pressed='true'] {
+    background: var(--menu-on);
+  }
+  .mode-label {
+    color: var(--menu-text);
+  }
+  .mode-hint {
+    color: var(--menu-dim);
+  }
+  .mode-option[aria-pressed='true'] .mode-label,
+  .mode-option[aria-pressed='true'] .mode-hint {
+    color: var(--menu-on-text);
+  }
+
+  /* Shared styling for the extras each caller slots in. */
+  .mode-panel :global(.menu-section) {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--menu-line);
+  }
+  .mode-panel :global(.menu-section[hidden]) {
+    display: none;
+  }
+  .mode-panel :global(.menu-section-title) {
+    margin: 0 0 0.5rem;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--menu-dim);
+  }
+  .mode-panel :global(.menu-swatch) {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border-radius: 999px;
+    border: 2px solid var(--menu-line);
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .mode-panel :global(.menu-swatch:hover) {
+    transform: scale(1.12);
+  }
+  .mode-panel :global(.menu-swatch[aria-pressed='true']) {
+    border-color: var(--menu-text);
+    transform: scale(1.12);
+  }
+  .mode-panel :global(.menu-button) {
+    width: 100%;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--menu-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--menu-dim);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .mode-panel :global(.menu-button:hover) {
+    color: var(--menu-text);
+    border-color: var(--menu-dim);
+  }
+</style>

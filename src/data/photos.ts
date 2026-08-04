@@ -10,6 +10,9 @@
  *   <file>-lg.jpg   →  ~2400px long edge, shown in the lightbox
  *   <file>-sm.jpg   →  ~800px long edge, shown in the gallery grid
  */
+import { palettes, type PhotoPalette } from './palettes';
+import libraryData from './library.json';
+
 const R2_BASE_URL = 'https://images.dvdkm.cc';
 
 /** What you fill in per photo. URLs are derived from `file`. */
@@ -34,6 +37,12 @@ export interface Photo extends PhotoInput {
   src: string;
   /** Gallery thumbnail. */
   thumb: string;
+  /**
+   * Dominant hues sampled from the image, strongest first. Drives the
+   * selective-colour swatches in the lightbox. Regenerate with
+   * `node scripts/extract-palettes.mjs`.
+   */
+  palette: PhotoPalette[];
 }
 
 function imageUrl(file: string, role: 'lg' | 'sm', w: number, h: number): string {
@@ -48,207 +57,18 @@ function imageUrl(file: string, role: 'lg' | 'sm', w: number, h: number): string
 }
 
 /**
- * Your photo library. Add an entry per photo — the easiest way is to run
- * `scripts/process-photos.sh`, which resizes your originals and prints
- * ready-to-paste entries (with correct dimensions) for this array.
+ * Your photo library, kept in `library.json` so the dev-only studio at
+ * `/studio` (see `studio/`) can rewrite it without touching this file. Edit it
+ * there, or by hand — the shape is exactly `PhotoInput`.
  */
-const library: PhotoInput[] = [
-  {
-    file: 'img-1076-3-edited-11',
-    title: 'Above the Clouds',
-    tags: ['landscape', 'sunset', 'mountains', 'clouds'],
-    width: 2048,
-    height: 1536,
-  },
-  {
-    file: 'img-1337',
-    title: 'Path to the Sea',
-    tags: ['landscape', 'sunset', 'coast', 'water'],
-    width: 3456,
-    height: 5184,
-  },
-  {
-    file: 'img-1555',
-    title: 'Point Reyes Beach',
-    tags: ['landscape', 'coast', 'water'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-1463',
-    title: 'Burning Sky',
-    tags: ['landscape', 'sunset', 'clouds', 'moody'],
-    width: 3456,
-    height: 5184,
-  },
-  {
-    file: 'img-2976',
-    title: 'Golden Coast',
-    tags: ['landscape', 'sunset', 'coast', 'water'],
-    width: 4474,
-    height: 3356,
-  },
-  {
-    file: 'img-1374-3',
-    title: 'Palace of Fine Arts',
-    tags: ['architecture', 'cityscape', 'night'],
-    width: 3369,
-    height: 5053,
-  },
-  {
-    file: 'img-1745',
-    title: 'Rocky Surf',
-    tags: ['landscape', 'coast', 'water'],
-    width: 5074,
-    height: 2850,
-  },
-  {
-    file: 'img-1586',
-    title: 'Pink Hour Pines',
-    tags: ['landscape', 'sunset', 'forest'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-1341',
-    title: 'Dusk Tide',
-    tags: ['landscape', 'sunset', 'coast', 'water', 'moody'],
-    width: 3456,
-    height: 5184,
-  },
-  {
-    file: 'img-1502',
-    title: 'Redwood Road',
-    tags: ['landscape', 'forest', 'moody'],
-    width: 5184,
-    height: 2912,
-  },
-  {
-    file: 'img-1811',
-    title: 'Point Cabrillo Light',
-    tags: ['landscape', 'coast', 'architecture'],
-    width: 5184,
-    height: 2912,
-  },
-  {
-    file: 'img-1076-3-edited-6',
-    title: 'Lone Pole',
-    tags: ['landscape', 'sunset', 'clouds', 'minimal'],
-    width: 1536,
-    height: 2048,
-  },
-  {
-    file: 'img-2393',
-    title: 'Cotton Candy Skyline',
-    tags: ['sunset', 'cityscape', 'moody'],
-    width: 4608,
-    height: 3456,
-  },
-  {
-    file: 'img-1547',
-    title: 'Headland Rock',
-    tags: ['landscape', 'coast', 'water'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-1076-3-edited-3',
-    title: 'Fog Rolling In',
-    tags: ['landscape', 'mountains', 'fog', 'moody'],
-    width: 1474,
-    height: 1965,
-  },
-  {
-    file: 'img-1379',
-    title: 'The Colonnade',
-    tags: ['architecture', 'cityscape', 'night'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-2663',
-    title: 'Footprints',
-    tags: ['landscape', 'coast', 'water', 'moody'],
-    width: 4608,
-    height: 3456,
-  },
-  {
-    file: 'img-1445',
-    title: 'Valley Lights',
-    tags: ['landscape', 'sunset', 'cityscape', 'moody'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-1595',
-    title: 'Spring Grass',
-    tags: ['landscape', 'mountains'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-1581',
-    title: 'Lenticular Sky',
-    tags: ['landscape', 'clouds'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-1549',
-    title: 'Coastal Ridge',
-    tags: ['landscape', 'coast'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-2635',
-    title: 'Rolling Green',
-    tags: ['landscape', 'sunset', 'minimal'],
-    width: 4608,
-    height: 3456,
-  },
-  {
-    file: 'img-1419',
-    title: 'On the Run',
-    tags: ['landscape', 'animals'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-1428',
-    title: 'The Long Trail',
-    tags: ['landscape', 'minimal'],
-    width: 5184,
-    height: 3456,
-  },
-  {
-    file: 'img-2441',
-    title: 'Dunes',
-    tags: ['landscape', 'desert', 'minimal'],
-    width: 4608,
-    height: 3456,
-  },
-  {
-    file: 'img-2738',
-    title: 'Snow Day Downtown',
-    tags: ['street', 'snow', 'winter'],
-    width: 4608,
-    height: 3456,
-  },
-  {
-    file: 'img-3005',
-    title: 'Roses in Bloom',
-    tags: ['flora', 'nature'],
-    width: 4608,
-    height: 3318,
-  },
-];
+const library: PhotoInput[] = libraryData;
 
 export const photos: Photo[] = library.map((p) => ({
   ...p,
   id: p.file,
   src: imageUrl(p.file, 'lg', p.width, p.height),
   thumb: imageUrl(p.file, 'sm', p.width, p.height),
+  palette: palettes[p.file] ?? [],
 }));
 
 /** Every tag used across the library, sorted by how often it appears. */
@@ -271,12 +91,12 @@ export function allTags(): { tag: string; count: number }[] {
  */
 export const tagCategories: { name: string; tags: string[] }[] = [
   {
-    name: 'Scene',
+    name: 'scene',
     tags: ['landscape', 'coast', 'water', 'mountains', 'forest', 'desert'],
   },
-  { name: 'Urban', tags: ['cityscape', 'architecture', 'street'] },
-  { name: 'Light & Mood', tags: ['sunset', 'night', 'clouds', 'fog', 'moody', 'minimal'] },
-  { name: 'Nature & Season', tags: ['winter', 'snow', 'animals', 'flora', 'nature'] },
+  { name: 'urban', tags: ['cityscape', 'architecture', 'street'] },
+  { name: 'light & mood', tags: ['sunset', 'night', 'clouds', 'fog', 'moody', 'minimal'] },
+  { name: 'nature & season', tags: ['winter', 'snow', 'animals', 'flora', 'nature'] },
 ];
 
 export interface CategorizedTag {
@@ -307,7 +127,7 @@ export function categorizedTags(): CategorizedTag[] {
   const leftover = [...counts.keys()].filter((tag) => !seen.has(tag)).sort();
   if (leftover.length) {
     groups.push({
-      name: 'Other',
+      name: 'other',
       tags: leftover.map((tag) => ({ tag, count: counts.get(tag)! })),
     });
   }
