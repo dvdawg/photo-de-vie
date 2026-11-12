@@ -19,6 +19,7 @@ const { photo, index } = Astro.props;
   >
     <img
       class="plate"
+      data-photo
       src={photo.thumb ?? photo.src}
       alt={`${photo.title} — ${photo.tags.join(', ')}`}
       loading="lazy"
@@ -32,7 +33,7 @@ const { photo, index } = Astro.props;
       partner frames are only fetched once that mode is switched on, so the
       default gallery still loads exactly one image per card.
     -->
-    <img class="blend-plate" data-blend alt="" aria-hidden="true" decoding="async" />
+    <img class="blend-plate" data-blend data-photo alt="" aria-hidden="true" decoding="async" />
 
     <figcaption class="card-meta">
       <span class="card-title">{photo.title}</span>
@@ -45,7 +46,6 @@ const { photo, index } = Astro.props;
   .card {
     margin: 0 0 1rem;
     break-inside: avoid;
-    animation: fade-in 0.4s ease both;
   }
   .card[hidden] {
     display: none;

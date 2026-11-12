@@ -1,6 +1,7 @@
 import { filterFor, hueTargets, viewModes } from '../data/viewModes';
 import { createModeMenu } from './modeMenu';
 import { readPhotoData } from './photoData';
+import { setPhotoSource } from './photoLoading';
 
 /** The page loads untreated; no mode is persisted between visits. */
 const DEFAULT_MODE = 'none';
@@ -41,7 +42,7 @@ export function initViewMode(): void {
     pairing = photos.map((_, i) => (i + 1 + Math.floor(Math.random() * (n - 1))) % n);
     plates.forEach((plate, i) => {
       const partner = photos[pairing[i]!];
-      if (partner) plate.src = partner.thumb ?? partner.src;
+      if (partner) setPhotoSource(plate, partner.thumb ?? partner.src);
     });
   }
 

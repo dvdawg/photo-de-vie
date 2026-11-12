@@ -16,8 +16,8 @@ export default {
         'accent-contrast': 'var(--accent-contrast)',
       },
       fontFamily: {
-        display: ['Clash Display', 'system-ui', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)'],
+        sans: ['var(--font-body)'],
       },
     },
   },

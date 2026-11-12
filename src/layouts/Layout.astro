@@ -1,5 +1,7 @@
 ---
 import '../styles/tailwind.css';
+import '@fontsource-variable/newsreader/standard.css';
+import newsreaderFont from '@fontsource-variable/newsreader/files/newsreader-latin-standard-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -20,16 +22,16 @@ const {
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/dvd.png" />
+    <link rel="preload" href={newsreaderFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap"
+      href="https://api.fontshare.com/v2/css?f[]=plein@1&display=swap"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
-    />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
     <title>{title}</title>
   </head>
   <body>
@@ -49,9 +51,8 @@ const {
     --accent-contrast: #ffffff;
     --radius: 10px;
     --maxw: 1400px;
-    --font-display: 'Clash Display', system-ui, sans-serif;
-    --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
-      Arial, sans-serif;
+    --font-display: 'Newsreader Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --font-body: 'Plein', system-ui, -apple-system, 'Segoe UI', sans-serif;
     font-family: var(--font-body);
   }
 
@@ -75,9 +76,22 @@ const {
     color: inherit;
   }
 
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+
   img {
     display: block;
     max-width: 100%;
+  }
+
+  /* Reserve the photo's space while it downloads and decodes. Without JS,
+     images remain visible and retain native lazy loading. */
+  .js img[data-photo]:not([data-photo-state='ready']):not([data-photo-state='error']) {
+    opacity: 0;
   }
 
   ::selection {

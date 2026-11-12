@@ -1,5 +1,6 @@
 import { LIGHTBOX_EVENT, wasConsumed, type LightboxDetail } from './events';
 import { readPhotoData } from './photoData';
+import { setPhotoSource } from './photoLoading';
 
 /**
  * Tag filtering and the lightbox. These share the `visible` list — the lightbox
@@ -135,7 +136,7 @@ export function initGallery(): void {
     const index = visible[pos];
     const photo = data[index];
     if (!photo) return;
-    lbImg.src = photo.src;
+    setPhotoSource(lbImg, photo.src);
     lbImg.alt = photo.title;
     lbTitle.textContent = photo.title;
     lbCounter.textContent = `${String(pos + 1).padStart(2, '0')} / ${String(

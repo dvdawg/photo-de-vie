@@ -2,6 +2,7 @@ import { filterFor, hueTargets, viewModes } from '../data/viewModes';
 import { LIGHTBOX_EVENT, type LightboxDetail } from './events';
 import { createModeMenu } from './modeMenu';
 import { readPhotoData, type PhotoRecord } from './photoData';
+import { clearPhotoSource, setPhotoSource } from './photoLoading';
 
 const DEFAULT_MODE = 'none';
 const DEFAULT_AMOUNT = 65;
@@ -94,10 +95,10 @@ export function initLightboxView(): void {
       button.setAttribute('aria-pressed', 'false');
 
       const img = document.createElement('img');
-      img.src = photo.thumb ?? photo.src;
       img.alt = '';
       img.loading = 'lazy';
       img.decoding = 'async';
+      setPhotoSource(img, photo.thumb ?? photo.src);
       button.appendChild(img);
 
       button.addEventListener('click', () => {
@@ -152,7 +153,7 @@ export function initLightboxView(): void {
       partner = (index + 1) % photos.length;
     }
     const photo = photoAt(partner);
-    if (photo) blend.src = photo.src;
+    if (photo) setPhotoSource(blend, photo.src);
 
     for (const button of partnerButtons) {
       const i = Number(button.dataset.partner);
@@ -218,7 +219,7 @@ export function initLightboxView(): void {
       // Release the override so the grid keeps whatever the header selected.
       delete lb.dataset.lbMode;
       lb.style.removeProperty('--lb-filter');
-      blend.removeAttribute('src');
+      clearPhotoSource(blend);
       return;
     }
 

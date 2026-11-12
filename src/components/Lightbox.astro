@@ -23,8 +23,8 @@ import LightboxControls from './LightboxControls.astro';
 
   <figure class="lb-figure">
     <div class="lb-frame">
-      <img class="lb-img" data-lb-img src="" alt="" />
-      <img class="lb-blend" data-lb-blend alt="" aria-hidden="true" />
+      <img class="lb-img" data-lb-img data-photo alt="" decoding="async" />
+      <img class="lb-blend" data-lb-blend data-photo alt="" aria-hidden="true" decoding="async" />
     </div>
     <figcaption class="lb-caption">
       <div class="lb-caption-main">
@@ -110,7 +110,7 @@ import LightboxControls from './LightboxControls.astro';
     justify-content: space-between;
   }
   .lb-counter {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 0.78rem;
     letter-spacing: 0.06em;
     color: rgba(255, 255, 255, 0.5);
