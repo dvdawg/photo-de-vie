@@ -90,8 +90,9 @@ export function initLightboxView(): void {
       button.type = 'button';
       button.className = 'partner';
       button.dataset.partner = String(i);
-      button.title = photo.title;
-      button.setAttribute('aria-label', `Blend with ${photo.title}`);
+      const number = String(i).padStart(2, '0');
+      button.title = `Photo ${number}`;
+      button.setAttribute('aria-label', `Blend with photo ${number}`);
       button.setAttribute('aria-pressed', 'false');
 
       const img = document.createElement('img');

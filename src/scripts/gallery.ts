@@ -116,9 +116,7 @@ export function initGallery(): void {
   // --- Lightbox ---
   const lb = document.querySelector<HTMLElement>('[data-lightbox]')!;
   const lbImg = lb.querySelector<HTMLImageElement>('[data-lb-img]')!;
-  const lbTitle = lb.querySelector<HTMLElement>('[data-lb-title]')!;
-  const lbSub = lb.querySelector<HTMLElement>('[data-lb-sub]')!;
-  const lbCounter = lb.querySelector<HTMLElement>('[data-lb-counter]')!;
+  const lbNumber = lb.querySelector<HTMLElement>('[data-lb-number]')!;
   const lbPrev = lb.querySelector<HTMLButtonElement>('[data-lb-prev]')!;
   const lbNext = lb.querySelector<HTMLButtonElement>('[data-lb-next]')!;
   const lbClose = lb.querySelector<HTMLButtonElement>('[data-lb-close]')!;
@@ -138,13 +136,8 @@ export function initGallery(): void {
     if (!photo) return;
     setPhotoSource(lbImg, photo.src);
     lbImg.alt = photo.title;
-    lbTitle.textContent = photo.title;
-    lbCounter.textContent = `${String(pos + 1).padStart(2, '0')} / ${String(
-      visible.length
-    ).padStart(2, '0')}`;
-    const sub = [photo.location, photo.year].filter(Boolean).join(' · ');
-    lbSub.textContent = sub;
-    lbSub.hidden = !sub;
+    // Keep the same photo number when navigating a filtered gallery.
+    lbNumber.textContent = String(index).padStart(2, '0');
     lbPrev.disabled = pos <= 0;
     lbNext.disabled = pos >= visible.length - 1;
     announce(index);

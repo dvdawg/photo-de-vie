@@ -8,13 +8,14 @@ interface Props {
 }
 
 const { photo, index } = Astro.props;
+const number = String(index).padStart(2, '0');
 ---
 
 <figure class="card" data-index={index} data-tags={photo.tags.join(' ')}>
   <button
     class="card-btn"
     type="button"
-    aria-label={`Open ${photo.title}`}
+    aria-label={`Open photo ${number}`}
     style={`aspect-ratio: ${photo.width} / ${photo.height};`}
   >
     <img
@@ -36,8 +37,7 @@ const { photo, index } = Astro.props;
     <img class="blend-plate" data-blend data-photo alt="" aria-hidden="true" decoding="async" />
 
     <figcaption class="card-meta">
-      <span class="card-title">{photo.title}</span>
-      {photo.location && <span class="card-location">{photo.location}</span>}
+      <span class="card-number">{number}</span>
     </figcaption>
   </button>
 </figure>
@@ -103,15 +103,10 @@ const { photo, index } = Astro.props;
     opacity: 1;
     transform: translateY(0);
   }
-  .card-title {
+  .card-number {
     display: block;
     font-family: var(--font-body);
     font-size: 0.95rem;
-  }
-  .card-location {
-    display: block;
-    font-family: var(--font-body);
-    color: rgba(255, 255, 255, 0.72);
-    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
   }
 </style>

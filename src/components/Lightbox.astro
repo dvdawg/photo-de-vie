@@ -27,11 +27,7 @@ import LightboxControls from './LightboxControls.astro';
       <img class="lb-blend" data-lb-blend data-photo alt="" aria-hidden="true" decoding="async" />
     </div>
     <figcaption class="lb-caption">
-      <div class="lb-caption-main">
-        <span class="lb-counter" data-lb-counter></span>
-        <span class="lb-title" data-lb-title></span>
-        <span class="lb-sub" data-lb-sub></span>
-      </div>
+      <span class="lb-number" data-lb-number></span>
     </figcaption>
   </figure>
 </div>
@@ -109,26 +105,10 @@ import LightboxControls from './LightboxControls.astro';
     align-items: baseline;
     justify-content: space-between;
   }
-  .lb-counter {
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    color: rgba(255, 255, 255, 0.5);
-    font-variant-numeric: tabular-nums;
-    margin-right: 0.7rem;
-  }
-  .lb-title {
+  .lb-number {
     font-family: var(--font-body);
     font-size: 1.05rem;
-  }
-  .lb-sub {
-    font-family: var(--font-body);
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.9rem;
-    margin-left: 0.6rem;
-  }
-  .lb-sub[hidden] {
-    display: none;
+    font-variant-numeric: tabular-nums;
   }
 
   .lb-close,
