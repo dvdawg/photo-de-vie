@@ -12,8 +12,6 @@ const { categories } = Astro.props;
 
 <header class="site-header">
   <div class="wrap header-inner">
-    <h1>photo de vie</h1>
-
     <div class="controls">
       <ViewModePanel />
       <TagFilter categories={categories} />
@@ -26,19 +24,11 @@ const { categories } = Astro.props;
     background: linear-gradient(180deg, var(--bg-elevated), var(--bg));
   }
   .header-inner {
-    padding: clamp(1rem, 5vw, 2rem) clamp(1rem, 4vw, 2.5rem);
+    padding: clamp(1rem, 5vw, 2rem) clamp(1rem, 4vw, 2.5rem) 0.25rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 1rem;
-  }
-  h1 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-variation-settings: 'opsz' 72;
-    letter-spacing: -0.034em;
   }
   .controls {
     display: flex;
